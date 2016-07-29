@@ -1,8 +1,6 @@
 package weibostatic;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 /**
  * Created by suntr on 7/23/2016.
  */
