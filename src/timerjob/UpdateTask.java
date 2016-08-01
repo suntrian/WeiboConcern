@@ -2,18 +2,27 @@ package timerjob;
 
 import org.quartz.SchedulerException;
 
-import weibostatic.WeiboGlobal;
+import weibostatic.Context;
 
 public class UpdateTask extends Thread{
 
-	WeiboGlobal global;
+	Context global;
 	String status;
 	String picpath;
 	
 	QuartzJob quartzJob;
 	UpdateJob updateJob;
 	
-	public UpdateTask(WeiboGlobal global, String status, String picpath) throws SchedulerException {
+	public UpdateTask(Context global, String status) {
+		// TODO Auto-generated constructor stub
+		this.global = global;
+		this.status = status;
+	
+		updateJob = new UpdateJob(global, status);
+		quartzJob = new QuartzJob(updateJob.getJob(), updateJob.getTrigger());
+	}
+	
+	public UpdateTask(Context global, String status, String picpath) throws SchedulerException {
 		// TODO Auto-generated constructor stub
 		this.global = global;
 		this.status = status;
@@ -30,6 +39,10 @@ public class UpdateTask extends Thread{
 		super.run();
 		this.quartzJob.run();
 	
+	}
+	
+	public void stopUpdate(){
+		this.quartzJob.stopSchedule();
 	}
 	
 }

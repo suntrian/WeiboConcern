@@ -1,32 +1,29 @@
 package notification;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import weibo4j.Timeline;
 import weibo4j.model.StatusWapper;
 import weibo4j.model.WeiboException;
-import weibo4j.util.WeiboConfig;
-import weibostatic.WeiboGlobal;
+import weibostatic.Context;
 
 public class Looper extends Thread{
 	
-	WeiboGlobal global;
+	Context global;
+
 	String[] ids;
 	String[] keywords;
-	boolean flag = false;
+	final int  INTERVAL = 5*60*1000;
+	static boolean flag = false;
 	
-	public Looper(WeiboGlobal global, String[] ids) {
+	public Looper(Context global, String[] ids) {
 		this.global = global;
 		this.ids = ids;
 		this.keywords = null;
 	}
 	
 	
-	public Looper(WeiboGlobal global, String[] ids,String[] keywords) {
+	public Looper(Context global, String[] ids,String[] keywords) {
 		// TODO Auto-generated constructor stub
 		this.global = global;
 		this.ids = ids;
@@ -43,10 +40,10 @@ public class Looper extends Thread{
 		while (!flag) {
 			try {
 				StatusWapper statusWapper = global.timeline.getFriendsTimeline();
-				Looker looker = new Looker(statusWapper, this.ids, this.keywords);
+				Looker looker = new Looker(global,statusWapper, this.ids, this.keywords);
 				looker.start();
 				
-				Thread.sleep(60000);
+				Thread.sleep(INTERVAL);
 				
 				
 			} catch (WeiboException e) {
@@ -61,10 +58,28 @@ public class Looper extends Thread{
 		
 	}
 	
-	public  void stoplooper(){
-		this.flag = true;
+	public static void stoplooper(){
+		flag = true;
 	}
 	
-	
+	public String[] getIds() {
+		return ids;
+	}
+
+
+	public void setIds(String[] ids) {
+		this.ids = ids;
+	}
+
+
+	public String[] getKeywords() {
+		return keywords;
+	}
+
+
+	public void setKeywords(String[] keywords) {
+		this.keywords = keywords;
+	}
+
 }
 

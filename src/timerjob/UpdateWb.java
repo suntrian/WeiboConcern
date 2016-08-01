@@ -4,25 +4,23 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import weibo4j.Timeline;
 import weibo4j.http.ImageItem;
 import weibo4j.model.Status;
 import weibo4j.model.WeiboException;
-import weibo4j.util.WeiboConfig;
-import weibostatic.WeiboGlobal;
+import weibostatic.Context;
 
 public class UpdateWb {
 	
-	WeiboGlobal global;
+	Context global;
 	
-	public UpdateWb(final WeiboGlobal global) {
+	public UpdateWb(final Context global) {
 		// TODO Auto-generated constructor stub
 		this.global = global;
 	}
 	
 	public String update(String text){
 		try {
-			Status status = global.timeline.updateStatus(text);
+			Status status = Context.timeline.updateStatus(text);
 			return status.getText();
 		} catch (WeiboException e) {
 			// TODO Auto-generated catch block
@@ -33,7 +31,7 @@ public class UpdateWb {
 	
 	public String update(String text, String picpath){
 		try {
-			Status status = global.timeline.uploadStatus(text, readFileImage(picpath));
+			Status status = Context.timeline.uploadStatus(text, readFileImage(picpath));
 			return status.getText();
 		} catch (WeiboException | IOException e) {
 			// TODO Auto-generated catch block
@@ -50,7 +48,7 @@ public class UpdateWb {
 		int r = bufferedInputStream.read(bytes);
 		if (len != r) {
 			bytes = null;
-			throw new IOException("读取文件不正确");
+			throw new IOException("read file failed!");
 		}
 		bufferedInputStream.close();
 		return new ImageItem("pic",bytes);

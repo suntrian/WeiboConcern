@@ -14,7 +14,7 @@ import java.util.Date;
 
 import org.quartz.CronScheduleBuilder;
 
-import weibostatic.WeiboGlobal;
+import weibostatic.Context;
 
 public class QuartzJob{
 
@@ -25,15 +25,18 @@ public class QuartzJob{
 	CronTrigger trigger;
 	
 	
-	public QuartzJob(JobDetail job,Trigger trigger) 
-			throws SchedulerException {
+	public QuartzJob(JobDetail job,Trigger trigger) {
 		// TODO Auto-generated constructor stub
-		this.status = status;
-		this.picpath = picpath;
-		SchedulerFactory schedFactory = new StdSchedulerFactory();
-		this.sched = schedFactory.getScheduler();
-		this.jobDetail = job;
-		this.trigger = (CronTrigger)trigger;
+		try {
+			SchedulerFactory schedFactory = new StdSchedulerFactory();
+			this.sched = schedFactory.getScheduler();
+			this.jobDetail = job;
+			this.trigger = (CronTrigger)trigger;
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void run() {
